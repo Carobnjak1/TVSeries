@@ -158,6 +158,7 @@ public class ShowsActivity extends AppCompatActivity {
                 Intent i = new Intent(ShowsActivity.this, EpisodesActivity.class);
                 i.putExtra("tvShowId", tvShow.getShow().getId());
                 i.putExtra("tvShowName", tvShow.getShow().getName());
+                i.putExtra("tvShowUrl", tvShow.getShow().getUrl());
                 startActivity(i);
             }
         });

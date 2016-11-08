@@ -24,6 +24,9 @@
         <activity android:name=".EpisodesActivity"
                   android:theme="@style/AppTheme.NoActionBar"
                   android:parentActivityName=".ShowsActivity"/>
+        <activity android:name=".ShowInfoActivity"
+                  android:theme="@style/AppTheme.NoActionBar"
+                  android:parentActivityName=".EpisodesActivity"/>
     </application>
 
 </manifest>

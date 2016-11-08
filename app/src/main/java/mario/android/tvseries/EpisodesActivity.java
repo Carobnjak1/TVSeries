@@ -32,12 +32,13 @@ public class EpisodesActivity extends AppCompatActivity {
     private static final String TAG = "EpisodesActivity";
 
     private Subscription subscription;
-    private RecyclerView tvShowRecyclerView;
+    private RecyclerView tvEpisodeRecyclerView;
     private Toolbar toolbar;
     private ProgressBar progressBar;
     private TextView infoTextView;
     private String tvShowId;
     private String tvShowName;
+    private String tvShowUrl;
     private Realm realm;
 
     @Override
@@ -47,6 +48,7 @@ public class EpisodesActivity extends AppCompatActivity {
 
         tvShowId = getIntent().getStringExtra("tvShowId");
         tvShowName = getIntent().getStringExtra("tvShowName");
+        tvShowUrl = getIntent().getStringExtra("tvShowUrl");
 
         realm = Realm.getDefaultInstance();
 
@@ -59,8 +61,8 @@ public class EpisodesActivity extends AppCompatActivity {
         }
 
         progressBar = (ProgressBar) findViewById(R.id.episodes_loading_progress);
-        tvShowRecyclerView = (RecyclerView) findViewById(R.id.episodes_recycler_view);
-        setupRecyclerView(tvShowRecyclerView);
+        tvEpisodeRecyclerView = (RecyclerView) findViewById(R.id.episodes_recycler_view);
+        setupRecyclerView(tvEpisodeRecyclerView);
 
         infoTextView = (TextView) findViewById(R.id.episodes_text_info);
 
@@ -85,8 +87,10 @@ public class EpisodesActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
 
-            case R.id.read_more:
-                // TODO New activity with details about TV show
+            case R.id.more_info:
+                Intent i = new Intent(EpisodesActivity.this, ShowInfoActivity.class);
+                i.putExtra("tvShowUrl", tvShowUrl);
+                startActivity(i);
                 return true;
 
             default:
@@ -139,7 +143,7 @@ public class EpisodesActivity extends AppCompatActivity {
 
     private void loadEpisodes(String id) {
         progressBar.setVisibility(View.VISIBLE);
-        tvShowRecyclerView.setVisibility(View.GONE);
+        tvEpisodeRecyclerView.setVisibility(View.GONE);
         infoTextView.setVisibility(View.GONE);
 
         SeriesApplication application = SeriesApplication.get(this);
@@ -152,9 +156,9 @@ public class EpisodesActivity extends AppCompatActivity {
                     @Override
                     public void onCompleted() {
                         progressBar.setVisibility(View.GONE);
-                        if (tvShowRecyclerView.getAdapter().getItemCount() > 0) {
-                            tvShowRecyclerView.requestFocus();
-                            tvShowRecyclerView.setVisibility(View.VISIBLE);
+                        if (tvEpisodeRecyclerView.getAdapter().getItemCount() > 0) {
+                            tvEpisodeRecyclerView.requestFocus();
+                            tvEpisodeRecyclerView.setVisibility(View.VISIBLE);
                         } else {
                             infoTextView.setText("No search results");
                             infoTextView.setVisibility(View.VISIBLE);
@@ -192,7 +196,7 @@ public class EpisodesActivity extends AppCompatActivity {
                             }
                         }
 
-                        EpisodesAdapter adapter = (EpisodesAdapter) tvShowRecyclerView.getAdapter();
+                        EpisodesAdapter adapter = (EpisodesAdapter) tvEpisodeRecyclerView.getAdapter();
                         adapter.setEpisodesList(episodes);
                         adapter.notifyDataSetChanged();
                     }
